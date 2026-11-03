@@ -1,0 +1,56 @@
+/* Supplemental scripts keep Pretendard wherever its glyph coverage permits. */
+:root { --font-ui:'Pretendard Variable','Noto Sans',-apple-system,BlinkMacSystemFont,sans-serif; }
+html:lang(ar) { --font-ui:'Noto Sans Arabic','Pretendard Variable',sans-serif; }
+html:lang(he) { --font-ui:'Noto Sans Hebrew','Pretendard Variable',sans-serif; }
+html:lang(hi) { --font-ui:'Noto Sans Devanagari','Pretendard Variable',sans-serif; }
+html:lang(th) { --font-ui:'Noto Sans Thai','Pretendard Variable',sans-serif; }
+html:lang(ja) { --font-ui:'Pretendard JP Variable','Hiragino Sans','Yu Gothic',sans-serif; }
+html:lang(zh-CN) { --font-ui:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif; }
+html:not(:lang(ko)):not(:lang(ja)):not(:lang(zh-CN)) :is(h1,h2,h3,p) { word-break:normal; overflow-wrap:break-word; }
+html:is(:lang(ar),:lang(he),:lang(hi),:lang(th)) :is(h1,h2,h3,p) { letter-spacing:normal; }
+html:is(:lang(ar),:lang(he)) :is(h1,h2,h3) { line-height:1.5; }
+html:lang(th) :is(h1,h2,h3,p) { line-height:1.65; }
+.header-actions .language { max-width:180px; min-width:56px; }
+.mobile-menu select { width:100%; max-width:100%; min-height:48px; }
+.hero-content h1 > span { max-width:100%; overflow-wrap:break-word; }
+.hero-photo,.motion .hero-photo { object-position:var(--hero-focus,65% center); }
+.moment-frame > img,.motion .moment-frame > img { object-position:var(--couple-focus,50% center); }
+@media (min-width:800px) {
+  .hero-content h1 > span:last-child { padding-inline:.390625em !important; }
+  html:lang(vi) .hero-content h1 > span:first-child { max-width:46vw; text-wrap:balance; }
+  html[data-hero-copy=right] .hero-content { text-align:right; }
+  html[data-hero-copy=right] .hero-content h1 { align-items:flex-end; }
+  html[data-hero-copy=left] .hero-content { text-align:left; }
+  html[data-hero-copy=left] .hero-content h1 { align-items:flex-start; }
+  html[dir=rtl][data-hero-copy=right] .hero-content h1 { align-items:flex-start; }
+  html[dir=rtl][data-hero-copy=left] .hero-content h1 { align-items:flex-end; }
+}
+html:not(:lang(ko)):not(:lang(ja)):not(:lang(zh-CN)) .hero-content h1 { font-size:clamp(2.05rem,5.2vw,5.25rem); }
+.language-fallback { flex-wrap:wrap; gap:12px 20px; }
+.language-fallback a { min-height:44px; display:inline-flex; align-items:center; }
+[dir=rtl] .hero-content { direction:rtl; text-align:right; }
+[dir=rtl] .camera-viewport,[dir=rtl] .camera-track,[dir=rtl] .camera-controls { direction:ltr; }
+[dir=rtl] .camera-info { direction:rtl; text-align:start; }
+[dir=rtl] .capture-step { padding-left:0; padding-right:22px; }
+[dir=rtl] .capture-step::before { left:auto; right:0; }
+html[dir=rtl].motion .moment-left { right:auto; left:calc(50% + 190px); }
+html[dir=rtl].motion .moment-right { left:auto; right:calc(50% + 190px); }
+[dir=rtl] .screen-dialog-meta p { text-align:start; }
+[dir=rtl] :is(.email,.wordmark,.footer-wordmark,.business-details dd,.apple-credit) { unicode-bidi:plaintext; }
+[dir=rtl] .progress-nav { right:auto; left:28px; }
+[dir=rtl] .progress-nav a { flex-direction:row-reverse; }
+[dir=rtl] .download svg,[dir=rtl] .hero-download svg { transform:scaleX(-1); }
+/* Photos, official hardware and actual app captures are never mirrored. */
+@media (max-width:1199px) and (min-width:800px) { .header-actions .mini { display:none; } }
+@media (min-width:800px) { [dir=rtl] .capture-visual { padding-right:0; padding-left:72px; } }
+@media (max-width:799px) {
+  .hero-content h1 { align-items:center; }
+  [dir=rtl] .hero-content { text-align:center; }
+  html:not(:lang(ko)):not(:lang(ja)):not(:lang(zh-CN)) .hero-content h1 { font-size:clamp(1.8rem,6.8vw,3.2rem); }
+  .mobile-menu .download { white-space:normal; text-align:center; }
+  .capture-step { min-width:0; }
+  .capture-intro { padding-inline:38px; }
+  .capture-intro h2 { font-size:clamp(1.75rem,8.2vw,2rem); }
+  .hero-label { left:50%; right:auto; transform:translateX(-50%); width:max-content; max-width:calc(100% - 24px); padding:4px 9px; border-radius:2px; background:rgba(16,26,36,.78); line-height:1.4; text-shadow:none; }
+}
+@media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
