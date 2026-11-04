@@ -188,3 +188,34 @@
  .result-cinema .result-cinema-caption{grid-column:1;grid-row:4;width:100%;margin:0;min-height:44px;text-align:start}
  .result-cinema .result-contact-inner{grid-column:2;grid-row:1/-1;width:min(100%,calc((100svh - var(--site-header-height,64px) - 24px)*4/3));height:auto;aspect-ratio:4/3;min-height:0;justify-self:center;align-self:center}
 }
+
+/* Capture choreography: read at alternating sides, focus the real camera at centre. */
+.capture-story-pinned .capture-layout{position:relative}
+.capture-story-pinned .capture-phone-carrier{transform:translate3d(var(--capture-phone-x,0px),var(--capture-phone-y,0px),0) scale(var(--capture-phone-scale,1))}
+.capture-story-pinned .actual-device figcaption{display:none}
+.capture-story-pinned .capture-tools{display:block;position:absolute;inset-inline-end:24px;right:auto;bottom:var(--capture-tools-bottom,16px);width:44px;height:44px;z-index:5}
+.capture-story-pinned .capture-tools .screen-open{display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:0}
+.capture-story-pinned .capture-tools .screen-open span{display:none}
+.capture-story-pinned .capture-tools .screen-open svg{width:18px;height:18px}
+@media(min-width:800px){
+ .capture-story-pinned .capture-copy{opacity:var(--capture-copy-opacity,1);transform:translate3d(var(--capture-copy-x,0px),0,0);will-change:transform,opacity}
+ .capture-story-pinned .capture-step h3{transition:color 160ms ease-out}
+ .capture-story-pinned .capture-step.is-current h3{color:var(--accent)}
+ .capture-story-pinned .capture-step p{transition:max-height 220ms cubic-bezier(.22,1,.36,1),opacity 120ms ease-out}
+ .capture-story-pinned:not(.capture-landscape-compact) .capture-step::after{content:'';position:absolute;inset-inline-start:-14px;top:14px;bottom:14px;width:2px;background:var(--accent);transform:scaleY(var(--capture-step-fill,0));transform-origin:50% 0;opacity:0}
+ .capture-story-pinned:not(.capture-landscape-compact) .capture-step.is-current::after{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){.capture-copy,.capture-step p,.capture-phone-carrier{transition:none!important}}
+
+.capture-story-pinned .capture{height:360svh}
+
+.capture-story-pinned .capture-tools{inset-inline-end:24px}
+
+/* A quiet stage cue keeps the camera story legible between the reading poses. */
+.capture-context{display:none}
+.capture-story-pinned .capture-context{display:grid;position:absolute;top:24px;inset-inline-start:32px;max-width:min(22vw,300px);margin:0;gap:10px;opacity:var(--context-opacity,0);pointer-events:none;z-index:3}
+.capture-context-heading{font-size:.7rem;line-height:1.5;font-weight:600;color:var(--body)}
+.capture-context-step{font-size:1rem;line-height:1.45;font-weight:650;color:var(--story-ink)}
+@media(max-width:799px){.capture-story-pinned .capture-context{top:auto;bottom:16px;inset-inline-start:24px;max-width:calc(100% - 104px);gap:0}.capture-context-heading{display:none}.capture-context-step{font-size:.875rem;line-height:1.45}}
+.capture-landscape-compact .capture-step::before{content:attr(data-section-title);position:static;inset:auto;width:auto;height:auto;background:none;opacity:1;transform:none;display:block;margin-bottom:12px;font-size:.75rem;font-weight:600;line-height:1.5;color:var(--body)}
+.capture-landscape-compact .capture-context{top:16px;max-width:25vw}

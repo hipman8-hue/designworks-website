@@ -15,18 +15,18 @@
   const qa=new URLSearchParams(location.search).has('motion-qa');
   section.classList.remove('section-pad');section.classList.add('scroll-films');
   const journey=document.createElement('div');journey.className='film-journey film-flow';
-  journey.innerHTML=`<span class="film-viewport-probe" aria-hidden="true"></span><div class="film-stage"><div class="film-layout"><p class="film-kicker-common" lang="en" aria-hidden="true"><span>01</span><span>REDEVELOP</span></p><div class="film-copy-stack">${chapters.map((c,i)=>`<article class="film-copy" id="${c.id}" data-film-index="${i}"><div class="film-copy-content"><p class="film-kicker" lang="en"><span>0${i+1}</span> ${c.name}</p><h3 data-i18n="${c.key}">${text(c.key,c.name)}</h3><p class="film-description" data-i18n="${c.key}Text">${text(c.key+'Text')}</p></div><figure class="film-static-proof"><div class="official-phone"><div class="phone-screen-clip"><img class="phone-screen-app" src="/assets/demos/${['redevelop','edit-room','originals'][i]}-proof-en.webp" width="640" height="1392" loading="lazy" alt="Pixira ${c.name} proof frame"></div><img class="phone-bezel" src="/assets/iphone-18-pro-silver-portrait.png" width="1350" height="2760" loading="lazy" alt="" aria-hidden="true"></div></figure></article>`).join('')}</div><figure class="film-device"><div class="official-phone"><div class="phone-screen-clip"><video class="phone-screen-app" data-scroll-film muted playsinline preload="none" poster="${poster}" aria-label="Pixira — real English app walkthrough"></video><img class="phone-screen-app film-loading-frame" src="${poster}" width="640" height="1392" alt="" aria-hidden="true"></div><img class="phone-bezel" src="/assets/iphone-18-pro-silver-portrait.png" width="1350" height="2760" loading="lazy" decoding="async" alt="" aria-hidden="true"></div></figure></div><div class="film-route" lang="en" dir="ltr" aria-hidden="true">${chapters.map((c,i)=>`<span><i></i>0${i+1} ${c.name}</span>`).join('')}</div></div>`;
+  journey.innerHTML=`<span class="film-viewport-probe" aria-hidden="true"></span><div class="film-stage"><div class="film-layout"><p class="film-kicker-common" lang="en" aria-hidden="true"><span>01</span><span>REDEVELOP</span></p><div class="film-copy-stack">${chapters.map((c,i)=>`<article class="film-copy" id="${c.id}" data-film-index="${i}"><div class="film-copy-content"><p class="film-kicker" lang="en"><span>0${i+1}</span> ${c.name}</p><h3 data-i18n="${c.key}">${text(c.key,c.name)}</h3><p class="film-description" data-i18n="${c.key}Text">${text(c.key+'Text')}</p></div><figure class="film-static-proof"><div class="official-phone"><div class="phone-screen-clip"><img class="phone-screen-app" src="/assets/demos/${['redevelop','edit-room','originals'][i]}-proof-en.webp" width="640" height="1392" loading="lazy" alt="Pixira ${c.name} proof frame"></div><img class="phone-bezel" src="/assets/iphone-18-pro-silver-portrait.png" width="1350" height="2760" loading="lazy" alt="" aria-hidden="true"></div></figure></article>`).join('')}</div><figure class="film-echo" aria-hidden="true"><div class="official-phone"><div class="phone-screen-clip"><img class="phone-screen-app film-echo-screen" src="/assets/demos/redevelop-proof-en.webp" width="640" height="1392" loading="lazy" alt=""></div><img class="phone-bezel" src="/assets/iphone-18-pro-silver-portrait.png" width="1350" height="2760" loading="lazy" alt=""></div></figure><figure class="film-device"><div class="official-phone"><div class="phone-screen-clip"><video class="phone-screen-app" data-scroll-film muted playsinline preload="none" poster="${poster}" aria-label="Pixira — real English app walkthrough"></video><img class="phone-screen-app film-loading-frame" src="${poster}" width="640" height="1392" alt="" aria-hidden="true"></div><img class="phone-bezel" src="/assets/iphone-18-pro-silver-portrait.png" width="1350" height="2760" loading="lazy" decoding="async" alt="" aria-hidden="true"></div></figure></div><div class="film-route" lang="en" dir="ltr" aria-hidden="true">${chapters.map((c,i)=>`<span><i></i>0${i+1} ${c.name}</span>`).join('')}</div></div>`;
   legacy.replaceWith(journey);
   const wrapper=section.querySelector(':scope > .wrap');if(wrapper){[...wrapper.children].forEach(e=>section.append(e));wrapper.remove();}
   const note=document.createElement('p');note.className='film-note';note.lang='en';note.textContent='Pixira in action';section.querySelector('.redevelop-heading').append(note);
-  const stage=journey.querySelector('.film-stage'),layout=journey.querySelector('.film-layout'),copies=[...journey.querySelectorAll('.film-copy')],device=journey.querySelector('.film-device'),video=device.querySelector('video'),route=[...journey.querySelectorAll('.film-route span')];
+  const stage=journey.querySelector('.film-stage'),layout=journey.querySelector('.film-layout'),copies=[...journey.querySelectorAll('.film-copy')],device=journey.querySelector('.film-device'),echo=journey.querySelector('.film-echo'),echoScreen=journey.querySelector('.film-echo-screen'),video=device.querySelector('video'),route=[...journey.querySelectorAll('.film-route span')];
   const saveData=navigator.connection?.saveData===true;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const smooth=(a,b,v)=>{const p=clamp((v-a)/(b-a));return p*p*(3-2*p)};
   let pinned=false,mobile=false,compact=false,active=false,loading=false,failed=false,blobURL=null;
   let rawT=0,shownT=0,targetTime=0,presentedTime=0,presentedFrames=0,clock=0,frame=0,layoutFrame=0,current=-1,lastRequestedFrame=-1,lastSeekAt=0,seekRequestCount=0;
   let firstFrameReady=false;const loadingFrame=device.querySelector('.film-loading-frame');
-  let geometry={phoneWidth:300,watch:[1,1,1],copyHeight:180};
+  let geometry={phoneWidth:300,watch:[1,1,1],copyHeight:180,baseCenter:0,copyCenter:0,copyShift:0,layoutWidth:0,watchScale:1};
   const abort=new AbortController();
   function request(){if(!frame&&!document.hidden)frame=requestAnimationFrame(draw)}
   async function load(){
@@ -44,6 +44,11 @@
     for(let i=1;i<beats.length;i++)if(u<=beats[i][0])return beats[i-1][1]+(beats[i][1]-beats[i-1][1])*smooth(beats[i-1][0],beats[i][0],u);
     return c.end;
   }
+  function interpolatePose(t){
+    const anchors=[[0,1,1],[.18,1,1],[.50,0,geometry.watchScale],[.78,0,geometry.watchScale],[1.02,-1,1],[1.18,-1,1],[1.50,0,geometry.watchScale],[1.78,0,geometry.watchScale],[2.02,1,1],[2.18,1,1],[2.50,0,geometry.watchScale],[2.78,0,geometry.watchScale],[3.08,1,1]];
+    for(let i=1;i<anchors.length;i++){const a=anchors[i-1],b=anchors[i];if(t<=b[0]){const p=smooth(a[0],b[0],t);return {side:a[1]+(b[1]-a[1])*p,scale:a[2]+(b[2]-a[2])*p};}}
+    const last=anchors.at(-1);return {side:last[1],scale:last[2]};
+  }
   function draw(now){
     frame=0;if(document.hidden)return;
     const dt=clock?Math.min(1000,now-clock):16;clock=now;
@@ -51,36 +56,34 @@
     const difference=rawT-shownT;
     shownT=Math.abs(difference)<.0004?rawT:shownT+difference*(1-Math.exp(-dt/65));
     const index=clamp(Math.floor(shownT),0,2),u=shownT-index;
-    if(current!==index){current=index;stage.dataset.chapter=String(index);const marker=layout.querySelector('.film-kicker-common');marker.children[0].textContent='0'+(index+1);marker.children[1].textContent=chapters[index].name;if(!firstFrameReady)loadingFrame.src=index===0?poster:'/assets/demos/'+['redevelop','edit-room','originals'][index]+'-open-en.webp';copies.forEach((e,i)=>e.classList.toggle('is-current',i===index));}
-    const pose=firstFrameReady?smooth(.22,.34,u)*(1-smooth(index===2?.86:.93,index===2?.93:1,u)):0;
+    if(current!==index){current=index;stage.dataset.chapter=String(index);const marker=layout.querySelector('.film-kicker-common');marker.children[0].textContent='0'+(index+1);marker.children[1].textContent=chapters[index].name;echoScreen.src=index===0?poster:'/assets/demos/'+['','redevelop','edit-room'][index]+'-proof-en.webp';echoScreen.loading='eager';if(!firstFrameReady)loadingFrame.src=index===0?poster:'/assets/demos/'+['redevelop','edit-room','originals'][index]+'-open-en.webp';copies.forEach((e,i)=>e.classList.toggle('is-current',i===index));}
+    const pose=interpolatePose(shownT),watching=1-Math.min(1,Math.abs(pose.side)*1.7);
     const paper=smooth(1.96,2.04,shownT);
     set(stage,'--film-paper',paper.toFixed(4));
     set(stage,'--film-ink',paper>.5?'#17191d':'#f5f3ed');
     set(stage,'--film-muted',paper>.5?'#606873':'#b9b8b4');
     set(stage,'--film-accent',paper>.5?'#955c37':'#d5ab86');
-    copies.forEach((copy,i)=>{
-      const local=shownT-i;
-      const entry=i===0?1:smooth(0,.06,local),exit=i===2?1:1-smooth(.97,1,local);
-      const opacity=entry*exit;
-      set(copy,'--copy-opacity',opacity.toFixed(4));
-      set(copy,'--copy-y',((1-entry)*16-(1-exit)*12+(mobile?0:-pose*7))+'px');
-      const returnCopy=i===2?smooth(.90,.96,local):0;
-      set(copy,'--title-opacity',(mobile?clamp(1-smooth(.22,.30,local)+returnCopy):1).toFixed(4));
-      set(copy,'--body-opacity',(mobile?clamp(1-smooth(.20,.26,local)+returnCopy):1).toFixed(4));
+    let activeCopyOpacity=0;copies.forEach((copy,i)=>{
+      const local=shownT-i,returnRead=i===2?smooth(3.08,3.20,shownT):0;
+      const opacity=i===index?Math.max((i===0?1:smooth(.03,.12,local))*(1-smooth(.16,.24,local)),returnRead):0;
+      if(i===index)activeCopyOpacity=opacity;set(copy,'--copy-opacity',opacity.toFixed(4));
+      set(copy,'--copy-y',((1-opacity)*12)+'px');
+      set(copy,'--title-opacity','1');set(copy,'--body-opacity','1');
     });
-    const zoom=mobile?1+pose*(geometry.watch[index]-1):.97+.03*smooth(0,.18,shownT);
-    set(device,'--subject-scale',zoom.toFixed(5));
-    set(device,'--subject-y',(mobile?0:-8*Math.sin(Math.PI*clamp(u)))+'px');
-    route.forEach((item,i)=>{item.classList.toggle('is-current',i===index);set(item,'--route-fill',clamp(shownT-i).toFixed(4))});
-    const filmU=.16+clamp((u-.28)/.44)*.62;
+    const availableSide=Math.max(0,(geometry.layoutWidth-geometry.phoneWidth*pose.scale)/2-18),centreShift=geometry.layoutWidth/2-geometry.baseCenter,subjectX=mobile?clamp(pose.side*Math.min(28,availableSide),-availableSide,availableSide):pose.side>=0?(1-pose.side)*centreShift:centreShift+(-pose.side)*(geometry.copyCenter-geometry.layoutWidth/2);
+    const copyX=mobile?0:geometry.copyShift*clamp(-pose.side);
+    set(device,'--subject-scale',pose.scale.toFixed(5));set(device,'--subject-x',subjectX.toFixed(2)+'px');set(device,'--subject-y',(mobile?geometry.readY*(1-watching):(pose.scale-1)*geometry.phoneWidth*2760/1350/2-6*Math.sin(Math.PI*clamp(u)))+'px');set(layout,'--copy-shift',copyX.toFixed(2)+'px');
+    set(echo,'--echo-visible',!mobile&&!compact&&geometry.layoutWidth>640?'1':'0');const mainCentre=geometry.baseCenter+subjectX,echoTarget=geometry.layoutWidth/2-Math.min(320,geometry.layoutWidth*.30),echoProgress=smooth(0,1,watching);set(echo,'--echo-x',(mainCentre+(echoTarget-mainCentre)*echoProgress).toFixed(2)+'px');set(echo,'--echo-y',(geometry.baseCenterY-6*Math.sin(Math.PI*clamp(u))).toFixed(2)+'px');
+    set(stage,'--film-watch',watching.toFixed(4));set(stage,'--film-label',(1-smooth(0,.15,activeCopyOpacity)).toFixed(4));route.forEach((item,i)=>{item.classList.toggle('is-current',i===index);set(item,'--route-fill',clamp(shownT-i).toFixed(4))});
+    const filmU=.16+clamp((u-.20)/.52)*.62;
     targetTime=movieTime(index,filmU);
-    document.documentElement.dataset.filmTone=paper<.5?'ink':'paper';
+    const wipeTop=(1-paper)*stage.offsetHeight;const markerPaper=wipeTop<(mobile?80:document.querySelector('.header').offsetHeight+36);set(stage,'--kicker-accent',markerPaper?'#955c37':'#d5ab86');document.documentElement.dataset.filmTone=wipeTop>document.querySelector('.header').offsetHeight?'ink':'paper';const routePaper=wipeTop<journey.querySelector('.film-route').offsetTop;set(stage,'--route-muted',routePaper?'#606873':'#b9b8b4');set(stage,'--route-accent',routePaper?'#955c37':'#d5ab86');
     let pendingSeek=false;
     if(video.readyState>=1&&!video.seeking&&!failed){
       const wanted=Math.round(clamp(targetTime,0,Math.max(0,video.duration-1/30))*30);
       if(wanted!==lastRequestedFrame){if(now-lastSeekAt>=1000/30){try{video.currentTime=wanted/30;lastRequestedFrame=wanted;lastSeekAt=now;seekRequestCount++;}catch(error){failed=true;stage.dataset.seekError=error.name}}else pendingSeek=true;}
     }
-    if(qa){journey.dataset.progress=(rawT/3.25).toFixed(6);journey.dataset.shownProgress=(shownT/3.25).toFixed(6);video.dataset.targetTime=targetTime.toFixed(5)}
+    if(qa){journey.dataset.progress=(rawT/3.25).toFixed(6);journey.dataset.shownProgress=(shownT/3.25).toFixed(6);video.dataset.targetTime=targetTime.toFixed(5);journey.dataset.watch=watching.toFixed(4)}
     if(shownT!==rawT||pendingSeek)request();else clock=0;
   }
   function update(now){
@@ -91,7 +94,7 @@
     const progress=pinned?clamp(-r.top/Math.max(1,journey.offsetHeight-stageHeight)):clamp((innerHeight*.65-r.top)/Math.max(innerHeight,journey.offsetHeight-innerHeight*.25));
     rawT=progress*3.25;if(active&&!wasActive){shownT=rawT;clock=0;}
     if(!pinned){
-      device.style.removeProperty('--subject-scale');device.style.removeProperty('--subject-y');
+      device.style.removeProperty('--subject-scale');device.style.removeProperty('--subject-x');device.style.removeProperty('--subject-y');layout.style.removeProperty('--copy-shift');
       copies.forEach(copy=>{copy.style.removeProperty('--copy-opacity');copy.style.removeProperty('--copy-y');copy.style.removeProperty('--body-opacity')});
     }
     if(pinned&&r.top<innerHeight*4&&r.bottom>0&&!reduced.matches)load();
@@ -109,12 +112,18 @@
     pinned=!saveData&&!failed&&!reduced.matches&&parseFloat(getComputedStyle(document.documentElement).fontSize)<22&&readHeight>=(compact?(mobile?96:180):280)&&copyHeight<h-(compact&&!mobile?110:160);
     journey.classList.toggle('film-pinned',pinned);journey.classList.toggle('film-flow',!pinned);
     geometry.copyHeight=copyHeight;
-    geometry.phoneWidth=mobile?Math.min(innerWidth*.72,readHeight*1350/2760,350):Math.min(420,readHeight*1350/2760);
+    const header=document.querySelector('.header').offsetHeight,basePhoneHeight=mobile?Math.min(readHeight,h*.56):Math.min(h*.62,compact?h-header-32:h-header-80);
+    geometry.phoneWidth=mobile?Math.min(innerWidth*.72,basePhoneHeight*1350/2760,350):Math.min(420,basePhoneHeight*1350/2760);
     journey.style.setProperty('--film-copy-height',copyHeight+'px');journey.style.setProperty('--film-phone-width',Math.max(compact?44:130,geometry.phoneWidth)+'px');
     if(pinned&&mobile){
       const phoneHeight=geometry.phoneWidth*2760/1350;
       geometry.watch=copies.map(()=>clamp((h-bottom-100)/phoneHeight,1,compact?3.2:1.8));
-    }else geometry.watch=[1,1,1];
+      geometry.watchScale=geometry.watch[0];
+    }else{
+      const phoneHeight=geometry.phoneWidth*2760/1350,watchHeight=Math.max(phoneHeight,(compact?h-header-32:h-header-80));
+      geometry.watch=[1,1,1];geometry.watchScale=clamp(watchHeight/phoneHeight,1,compact?1.5:1.38);
+    }
+    geometry.readY=mobile?Math.min(0,100+copyHeight+24-(h-64-geometry.phoneWidth*2760/1350)):0;geometry.layoutWidth=layout.clientWidth;geometry.baseCenter=device.offsetLeft+device.offsetWidth/2;geometry.baseCenterY=device.offsetTop+device.offsetHeight/2;geometry.copyCenter=copies[0].parentElement.offsetLeft+copies[0].parentElement.offsetWidth/2;geometry.copyShift=geometry.layoutWidth-2*copies[0].parentElement.offsetLeft-copies[0].parentElement.offsetWidth;
     update();
   }
   const queue=()=>{if(!layoutFrame)layoutFrame=requestAnimationFrame(update)};
@@ -124,7 +133,7 @@
   video.addEventListener('error',()=>{failed=true;stage.dataset.failed='true';reflow()});
   video.addEventListener('play',()=>video.pause());
   if('requestVideoFrameCallback'in video){const presented=(_,m)=>{presentedTime=m.mediaTime;presentedFrames=m.presentedFrames;if(!firstFrameReady&&Math.abs(presentedTime-targetTime)<.08){firstFrameReady=true;loadingFrame.hidden=true}if(qa){video.dataset.presentedTime=presentedTime.toFixed(5);video.dataset.presentedFrames=String(presentedFrames)}if(qa||!firstFrameReady)video.requestVideoFrameCallback(presented)};video.requestVideoFrameCallback(presented)}
-  if(qa)globalThis.PixiraStoryQA={sample:()=>({rawT,shownT,compact,mobile,copyHeight:geometry.copyHeight,phoneWidth:geometry.phoneWidth,lastRequestedFrame,seekRequestCount,targetTime,presentedTime,presentedFrames,pinned,active,failed,paused:video.paused,seeking:video.seeking,currentTime:video.currentTime,watch:geometry.watch.slice()})};
+  if(qa)globalThis.PixiraStoryQA={sample:()=>({rawT,shownT,compact,mobile,copyHeight:geometry.copyHeight,phoneWidth:geometry.phoneWidth,baseCenter:geometry.baseCenter,copyCenter:geometry.copyCenter,copyShift:geometry.copyShift,layoutWidth:geometry.layoutWidth,watchScale:geometry.watchScale,lastRequestedFrame,seekRequestCount,targetTime,presentedTime,presentedFrames,pinned,active,failed,paused:video.paused,seeking:video.seeking,currentTime:video.currentTime,watch:geometry.watch.slice(),phone:device.getBoundingClientRect().toJSON(),echo:echo.getBoundingClientRect().toJSON(),copy:copies[Math.max(0,current)].getBoundingClientRect().toJSON()})};
   addEventListener('scroll',queue,{passive:true});addEventListener('resize',reflow);document.fonts?.addEventListener('loadingdone',reflow);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){if(frame)cancelAnimationFrame(frame);frame=0;clock=0;}else queue()});
   reduced.addEventListener?.('change',()=>{if(frame)cancelAnimationFrame(frame);frame=0;clock=0;reflow()});
