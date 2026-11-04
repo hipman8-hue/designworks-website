@@ -136,3 +136,55 @@
 
 .result-proof-kicker{text-transform:uppercase}
 @media(max-width:799px){.result-proof-title>span{display:block}.result-redeveloped img,.result-original img{aspect-ratio:4/5;object-fit:cover;object-position:58% 42%}}
+
+/* Compact capture remains a scroll story: the intro yields before one active instruction
+   and the upright, un-cropped official phone arrive. */
+.capture-compact .capture{height:340svh}
+.capture-compact .capture-intro{top:16px}
+.capture-compact .capture-intro h2{font-size:clamp(1.35rem,6vw,1.75rem);line-height:1.22;margin-bottom:8px}
+.capture-compact .capture-intro .lead{font-size:.875rem;line-height:1.45}
+.capture-compact .capture-visual{opacity:var(--capture-visual-opacity,0);transition:none}
+.capture-compact .capture-steps{bottom:16px}
+.capture-compact .capture-step h3{font-size:1rem;min-height:44px}
+.capture-compact .capture-step p{font-size:.875rem;line-height:1.45}
+.capture-compact .capture-tools{bottom:calc(16px + var(--capture-step-height) - 44px)}
+
+/* A short landscape viewport keeps an upright official phone beside a single reading unit. */
+.capture-landscape-compact .capture{height:280svh}
+.capture-landscape-compact .capture-layout{grid-template-columns:minmax(0,1.08fr) minmax(150px,.62fr);gap:clamp(20px,4vw,48px);padding:10px 0}
+.capture-landscape-compact .capture-copy{position:relative;align-self:center;height:var(--capture-reading-height)}
+.capture-landscape-compact .capture-intro,.capture-landscape-compact .capture-steps{position:absolute;inset:0;margin:0;height:auto}
+.capture-landscape-compact .capture-intro{display:flex;flex-direction:column;justify-content:center;transform:translate3d(0,var(--capture-intro-y,0),0)}
+.capture-landscape-compact .capture-intro h2{font-size:clamp(1.5rem,3.4vw,2.25rem);margin-bottom:8px}
+.capture-landscape-compact .capture-intro .lead{font-size:.9rem;line-height:1.45}
+.capture-landscape-compact .capture-steps{display:flex;align-items:center}
+.capture-landscape-compact .capture-step{position:absolute;inset:50% 0 auto;opacity:var(--capture-step-opacity,0);transform:translate3d(0,calc(-50% + var(--capture-step-y,0px)),0);pointer-events:none}
+.capture-landscape-compact .capture-step h3{font-size:1rem;min-height:44px}
+.capture-landscape-compact .capture-step p{font-size:.875rem;line-height:1.45}
+.capture-landscape-compact .capture-visual{align-self:center;justify-self:center}
+.capture-landscape-compact .capture-tools{display:block;position:absolute;right:auto;inset-inline-end:16px;bottom:12px;width:44px;height:44px;z-index:4}
+.capture-landscape-compact .capture-tools .screen-open{display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;font-size:0}
+.capture-landscape-compact .capture-tools .screen-open span{display:none}
+.capture-landscape-compact .capture-tools .screen-open svg{width:18px;height:18px}
+
+/* When the spread cannot be read at once, make it a three-print cinema rather than
+   reverting to a small static grid. Each real 4:3 export and localized caption gets a turn. */
+.result-contact.result-cinema{height:200svh}
+.result-cinema .result-proof-stage{padding-block:20px}
+.result-cinema .result-contact-inner{display:block;width:min(calc(100% - 48px),69.333svh);height:auto;aspect-ratio:4/3;margin-inline:auto;position:relative}
+.result-cinema .result-photo{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:var(--result-photo-opacity,0);pointer-events:none;transform:translate3d(var(--print-x,0),var(--print-y,0) ,0) rotate(var(--print-rotate,0deg)) scale(var(--print-scale,1));transition:none;will-change:transform,opacity}
+.result-cinema .result-photo img{width:100%;height:100%;aspect-ratio:4/3;object-fit:cover}
+.result-cinema .result-photo figcaption{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.result-cinema-caption{display:none}
+.result-cinema .result-cinema-caption{display:block;width:min(calc(100% - 48px),69.333svh);min-height:44px;margin:0 auto 8px;font-size:.875rem;line-height:1.45;font-weight:600;color:var(--story-ink);overflow-wrap:anywhere}
+@media(max-width:799px){.result-contact.result-cinema{height:220svh}.result-cinema .result-proof-stage{padding-block:14px}.result-cinema .result-contact-inner,.result-cinema .result-cinema-caption{width:min(calc(100% - 32px),69.333svh)}.result-cinema .result-proof-title{font-size:clamp(1.25rem,6vw,1.65rem);margin-bottom:14px}.result-cinema .result-proof-kicker{margin-bottom:8px}.result-cinema .result-cinema-caption{font-size:.875rem}}
+@media(min-width:600px) and (max-height:599px){.result-contact.result-cinema{height:180svh}.result-cinema .result-contact-inner,.result-cinema .result-cinema-caption{width:min(calc(100% - 48px),64svh)}.result-cinema .result-proof-title{font-size:clamp(1.2rem,2.5vw,1.7rem);margin-bottom:10px}.result-cinema .result-proof-kicker{margin-bottom:6px}.result-cinema .result-cinema-caption{margin-bottom:6px;font-size:.875rem}}
+
+/* Short landscape keeps the proof large: copy at one side, a full 4:3 print at the other. */
+@media(min-width:600px) and (max-height:599px){
+ .result-cinema .result-proof-stage{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-rows:1fr auto auto auto 1fr;column-gap:32px;align-items:center;padding:12px 24px}
+ .result-cinema .result-proof-kicker{grid-column:1;grid-row:2;width:100%;margin:0 0 8px;text-align:start}
+ .result-cinema .result-proof-title{grid-column:1;grid-row:3;width:100%;padding:0;margin:0 0 16px;font-size:clamp(1.25rem,2.7vw,1.8rem);text-align:start}
+ .result-cinema .result-cinema-caption{grid-column:1;grid-row:4;width:100%;margin:0;min-height:44px;text-align:start}
+ .result-cinema .result-contact-inner{grid-column:2;grid-row:1/-1;width:min(100%,calc((100svh - var(--site-header-height,64px) - 24px)*4/3));height:auto;aspect-ratio:4/3;min-height:0;justify-self:center;align-self:center}
+}

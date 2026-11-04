@@ -23,7 +23,7 @@
   const saveData=navigator.connection?.saveData===true;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const smooth=(a,b,v)=>{const p=clamp((v-a)/(b-a));return p*p*(3-2*p)};
-  let pinned=false,mobile=false,active=false,loading=false,failed=false,blobURL=null;
+  let pinned=false,mobile=false,compact=false,active=false,loading=false,failed=false,blobURL=null;
   let rawT=0,shownT=0,targetTime=0,presentedTime=0,presentedFrames=0,clock=0,frame=0,layoutFrame=0,current=-1,lastRequestedFrame=-1,lastSeekAt=0,seekRequestCount=0;
   let firstFrameReady=false;const loadingFrame=device.querySelector('.film-loading-frame');
   let geometry={phoneWidth:300,watch:[1,1,1],copyHeight:180};
@@ -102,17 +102,18 @@
   function measure(){
     layoutFrame=0;mobile=innerWidth<800;
     const h=journey.querySelector('.film-viewport-probe').getBoundingClientRect().height||innerHeight;
+    compact=h<600||(mobile&&h<740);journey.classList.toggle('film-compact',compact);
     const copyHeight=Math.max(...copies.map(copy=>copy.querySelector('.film-copy-content').scrollHeight));
     const top=mobile?100:90,bottom=mobile?64:60;
-    const readHeight=mobile?h-top-copyHeight-24-bottom:h-155;
-    pinned=!saveData&&!failed&&!reduced.matches&&parseFloat(getComputedStyle(document.documentElement).fontSize)<22&&readHeight>=280&&copyHeight<h-160;
+    const readHeight=mobile?h-top-copyHeight-24-bottom:compact?h-document.querySelector('.header').offsetHeight-32:h-155;
+    pinned=!saveData&&!failed&&!reduced.matches&&parseFloat(getComputedStyle(document.documentElement).fontSize)<22&&readHeight>=(compact?(mobile?96:180):280)&&copyHeight<h-(compact&&!mobile?110:160);
     journey.classList.toggle('film-pinned',pinned);journey.classList.toggle('film-flow',!pinned);
     geometry.copyHeight=copyHeight;
     geometry.phoneWidth=mobile?Math.min(innerWidth*.72,readHeight*1350/2760,350):Math.min(420,readHeight*1350/2760);
-    journey.style.setProperty('--film-copy-height',copyHeight+'px');journey.style.setProperty('--film-phone-width',Math.max(130,geometry.phoneWidth)+'px');
+    journey.style.setProperty('--film-copy-height',copyHeight+'px');journey.style.setProperty('--film-phone-width',Math.max(compact?44:130,geometry.phoneWidth)+'px');
     if(pinned&&mobile){
       const phoneHeight=geometry.phoneWidth*2760/1350;
-      geometry.watch=copies.map(()=>clamp((h-bottom-100)/phoneHeight,1,1.8));
+      geometry.watch=copies.map(()=>clamp((h-bottom-100)/phoneHeight,1,compact?3.2:1.8));
     }else geometry.watch=[1,1,1];
     update();
   }
@@ -123,7 +124,7 @@
   video.addEventListener('error',()=>{failed=true;stage.dataset.failed='true';reflow()});
   video.addEventListener('play',()=>video.pause());
   if('requestVideoFrameCallback'in video){const presented=(_,m)=>{presentedTime=m.mediaTime;presentedFrames=m.presentedFrames;if(!firstFrameReady&&Math.abs(presentedTime-targetTime)<.08){firstFrameReady=true;loadingFrame.hidden=true}if(qa){video.dataset.presentedTime=presentedTime.toFixed(5);video.dataset.presentedFrames=String(presentedFrames)}if(qa||!firstFrameReady)video.requestVideoFrameCallback(presented)};video.requestVideoFrameCallback(presented)}
-  if(qa)globalThis.PixiraStoryQA={sample:()=>({rawT,shownT,lastRequestedFrame,seekRequestCount,targetTime,presentedTime,presentedFrames,pinned,active,failed,paused:video.paused,seeking:video.seeking,currentTime:video.currentTime,watch:geometry.watch.slice()})};
+  if(qa)globalThis.PixiraStoryQA={sample:()=>({rawT,shownT,compact,mobile,copyHeight:geometry.copyHeight,phoneWidth:geometry.phoneWidth,lastRequestedFrame,seekRequestCount,targetTime,presentedTime,presentedFrames,pinned,active,failed,paused:video.paused,seeking:video.seeking,currentTime:video.currentTime,watch:geometry.watch.slice()})};
   addEventListener('scroll',queue,{passive:true});addEventListener('resize',reflow);document.fonts?.addEventListener('loadingdone',reflow);
   document.addEventListener('visibilitychange',()=>{if(document.hidden){if(frame)cancelAnimationFrame(frame);frame=0;clock=0;}else queue()});
   reduced.addEventListener?.('change',()=>{if(frame)cancelAnimationFrame(frame);frame=0;clock=0;reflow()});
