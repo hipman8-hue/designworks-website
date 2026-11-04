@@ -191,3 +191,14 @@ html:lang(ko).moment-immersive .moment-side{word-break:keep-all;overflow-wrap:no
 @media(max-width:799px){
  .moment-immersive .moment-frame{clip-path:inset(var(--moment-mobile-top,0px) var(--moment-horizontal) var(--moment-mobile-bottom,0px) var(--moment-horizontal) round var(--moment-radius,0px))}
 }
+
+/* Keep enlarged labels in document flow and preserve whole words where possible. */
+.hero-content h1 > span{hyphens:auto}
+html.large-text .hero-label{position:static;inset:auto;transform:none;display:table;width:auto;max-width:100%;margin:0 auto 24px;white-space:normal;opacity:1}
+html.large-text .hero-content h1{font-size:clamp(1.1rem,8vw,1.5rem)!important}
+.footer-optics{display:none}
+
+@media(max-width:799px){.hero-pinned .intro-sticky{align-items:start;padding-top:16px}.hero-pinned .hero-frame{transform-origin:50% 0}}
+/* Hide the entire skip link at any text size; reveal it on keyboard focus. */
+.skip{top:0;transform:translateY(calc(-100% - 16px))}
+.skip:focus{top:12px;transform:none}
