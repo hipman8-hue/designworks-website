@@ -91,3 +91,26 @@ html[dir=rtl].motion .moment-right { left:auto; right:calc(50% + 190px); }
  .capture-visual { translate:none!important; }
  .camera-index button,.screen-open,.menu-button,.menu-close { scale:1!important; transition:none!important; }
 }
+
+/* Scroll-scrubbed camera story on phones and tablets, using the same selection timeline. */
+.hero-pinned .intro { height:165svh; padding:0; }
+.hero-pinned .intro-sticky { position:sticky; top:0; height:100svh; min-height:0; padding:0; display:grid; align-items:center; }
+.hero-pinned .hero-frame { position:relative; inset:auto; width:100%; height:auto; transform:scale(var(--touch-hero-frame,.94)); border-radius:var(--touch-hero-radius,32px); }
+.touch-rail .cameras { height:380svh; padding:0; --art-h:var(--touch-art-h,240px); }
+.touch-rail .cameras-sticky { position:sticky; top:0; height:100svh; min-height:0; box-sizing:border-box; padding:76px 0 20px; display:flex; flex-direction:column; justify-content:center; gap:24px; }
+.touch-rail .section-heading { margin:0 auto; text-align:start; flex-shrink:0; }
+.touch-rail .section-heading h2 { font-size:clamp(1.6rem,4.5vw,2.5rem); line-height:1.3; }
+.touch-rail .section-heading .lead { font-size:1rem; line-height:1.6; margin-top:14px; }
+.touch-rail .camera-table { flex-shrink:0; min-height:0; }
+.touch-rail .camera-viewport { overflow:hidden; scroll-snap-type:none; padding:30px 0 0; touch-action:pan-y; }
+.touch-rail .camera-track { --touch-card-width:min(86vw,640px); --track-pad:calc((100vw - var(--touch-card-width))/2); padding-inline:var(--track-pad); gap:24px; transform:translate3d(var(--track-x,0px),var(--rail-entry-y,36px),0); }
+.touch-rail .camera-card { width:var(--touch-card-width); }
+.touch-rail .camera-art { height:var(--touch-art-h,240px); }
+.touch-rail .camera-art img { transform:scale(var(--rail-entry-scale,.78)); }
+.touch-rail .camera-info { padding:30px 2px 0; }
+.touch-rail .camera-info h3 { font-size:clamp(1.125rem,2.5vw,1.4375rem); line-height:1.4; }
+.touch-rail .camera-info > p:last-child { font-size:1rem; line-height:1.6; }
+.touch-rail .camera-controls { flex-shrink:0; margin:0 auto; width:calc(100% - 48px); }
+.touch-rail .camera-controls .camera-step-buttons { display:none; }
+.touch-rail .camera-index { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; gap:0; }
+.touch-rail .camera-index button { min-width:0; padding-inline:4px; }
