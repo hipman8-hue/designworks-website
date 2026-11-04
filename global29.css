@@ -114,3 +114,9 @@ html[dir=rtl].motion .moment-right { left:auto; right:calc(50% + 190px); }
 .touch-rail .camera-controls .camera-step-buttons { display:none; }
 .touch-rail .camera-index { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; gap:0; }
 .touch-rail .camera-index button { min-width:0; padding-inline:4px; }
+
+/* Tablet/narrow-desktop hero children are absolutely positioned. Keep an explicit
+   height in their sticky grid: height:auto collapses the frame to zero. */
+@media (min-width:800px) {
+  .hero-pinned .hero-frame { height:100%; }
+}
