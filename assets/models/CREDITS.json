@@ -1,0 +1,503 @@
+{
+  "source": "https://beveled.app/models/iphone-17-pro.glb",
+  "bytes": 3013144,
+  "sha256": "fd82477774f9250d9776fb24d82ae3a7612f0faa698c36ec817e7f1019f06ac3",
+  "license": "CC BY4.0",
+  "author": "Ranguel",
+  "original": "https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec",
+  "adapter": "Beveled",
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0",
+    "extras": {
+      "author": "Ranguel (https://sketchfab.com/Ranguel)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/iphone-17-pro-4541aa8a28324b33a2baaf81d263aaec",
+      "title": "iPhone 17 Pro",
+      "preparedBy": "app-preview-craft/scripts/models.mjs",
+      "beveled": {
+        "device": "iphone-17-pro",
+        "units": "mm * 0.01",
+        "dimensionsMm": [
+          71.9,
+          150,
+          8.75
+        ],
+        "changes": "World transforms baked; body measured without camera/buttons and normalized; front display flattened/promoted to outer glass plane; front overlay roles split from camera glass; wallpaper removed; WebP textures at max 2048; lossless Meshopt encoding of float geometry."
+      }
+    }
+  },
+  "nodes": [
+    {
+      "name": "Object_4",
+      "extras": {
+        "beveledRole": "frame"
+      },
+      "mesh": 0,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_5",
+      "extras": null,
+      "mesh": 1,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_6",
+      "extras": null,
+      "mesh": 2,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_7",
+      "extras": null,
+      "mesh": 3,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_8",
+      "extras": null,
+      "mesh": 4,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_9",
+      "extras": {
+        "beveledRole": "back"
+      },
+      "mesh": 5,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_10",
+      "extras": null,
+      "mesh": 6,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_11",
+      "extras": null,
+      "mesh": 7,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_12",
+      "extras": null,
+      "mesh": 8,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_13",
+      "extras": null,
+      "mesh": 9,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_14",
+      "extras": null,
+      "mesh": 10,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_15",
+      "extras": null,
+      "mesh": 11,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_16",
+      "extras": null,
+      "mesh": 12,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_17",
+      "extras": {
+        "beveledRole": "back"
+      },
+      "mesh": 13,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_19",
+      "extras": {
+        "beveledRole": "frame"
+      },
+      "mesh": 14,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_20",
+      "extras": null,
+      "mesh": 15,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_21__front_overlay",
+      "extras": {
+        "beveledRole": "glass"
+      },
+      "mesh": 16,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_22",
+      "extras": {
+        "beveledRole": "overlay"
+      },
+      "mesh": 17,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    },
+    {
+      "name": "Object_23",
+      "extras": {
+        "beveledRole": "screen"
+      },
+      "mesh": 18,
+      "translation": null,
+      "rotation": null,
+      "scale": null
+    }
+  ],
+  "materials": [
+    {
+      "name": "Anodized_aluminum",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.8634389824587956,
+          0.8634389824587956,
+          0.8634389824587956,
+          1
+        ],
+        "roughnessFactor": 0,
+        "metallicFactor": 0.23047139187983806
+      },
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0,
+          "specularTexture": {
+            "index": 7
+          }
+        }
+      }
+    },
+    {
+      "name": "Plastic_antena",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.5190939003045922,
+          0.5190939003045922,
+          0.5190939003045922,
+          1
+        ],
+        "roughnessFactor": 0.5,
+        "metallicFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0
+        }
+      }
+    },
+    {
+      "name": "Plastic_port",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.000918352,
+          0.000918352,
+          0.000918352,
+          1
+        ],
+        "roughnessFactor": 0.413636,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Camera_filter",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0.0185015,
+          1
+        ],
+        "roughnessFactor": 0.559091,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "material",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          0.943701,
+          0.58047,
+          1
+        ],
+        "roughnessFactor": 0.5,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Glass_tint",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          0.8559932699447813
+        ],
+        "roughnessFactor": 0,
+        "metallicFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.5027272542317708
+        },
+        "KHR_materials_transmission": {
+          "transmissionFactor": 0.1440067300552187
+        }
+      }
+    },
+    {
+      "name": "Metal_Screw",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.8,
+          0.8,
+          0.8,
+          1
+        ],
+        "roughnessFactor": 0.14515149665601326,
+        "metallicFactor": 0.9996969512014678
+      },
+      "extensions": null
+    },
+    {
+      "name": "Plastic_LED",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          0.26083653159172854
+        ],
+        "metallicFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.4916115934020959
+        }
+      }
+    },
+    {
+      "name": "Display_Frame",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "roughnessFactor": 0,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Camera_sapphire_miror",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          0.18188716834081334
+        ],
+        "roughnessFactor": 0,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Camera_mirror_filter",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "roughnessFactor": 0.5,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Camera_Lens",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.002044359215586134,
+          0,
+          0.016321789489298074,
+          0.8924314375990499
+        ],
+        "roughnessFactor": 0.0090909,
+        "metallicFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_transmission": {
+          "transmissionFactor": 0.10756856240095014
+        }
+      }
+    },
+    {
+      "name": "Metal_mesh",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "roughnessFactor": 0.12090907241358902,
+        "baseColorTexture": {
+          "index": 4
+        }
+      },
+      "extensions": null
+    },
+    {
+      "name": "Frosted_glass",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "roughnessFactor": 0,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "Glass",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0,
+          0,
+          0,
+          0.25
+        ],
+        "roughnessFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_transmission": {
+          "transmissionFactor": 1
+        }
+      }
+    },
+    {
+      "name": "OLED_off",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.0201105,
+          0.0201105,
+          0.0201105,
+          1
+        ],
+        "roughnessFactor": 0.0590909,
+        "metallicFactor": 0
+      },
+      "extensions": null
+    },
+    {
+      "name": "OLED",
+      "extras": null,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.02,
+          0.02,
+          0.025,
+          1
+        ],
+        "roughnessFactor": 0.0568182,
+        "metallicFactor": 0
+      },
+      "extensions": {
+        "KHR_materials_emissive_strength": {
+          "emissiveStrength": 10
+        }
+      }
+    }
+  ],
+  "runtimeChanges": [
+    "Screen material replaced with native Pixira English video texture; display UV orientation corrected.",
+    "Silver frame material simplified; subtle display reflection added; inactive Dynamic Island fill joins source physical cutouts.",
+    "Transparent native-screen still renders used for non-WebGL / reduced-motion fallback."
+  ],
+  "licenseText": "https://creativecommons.org/licenses/by/4.0/",
+  "runtimeSoftware": "SOFTWARE-LICENSES.txt",
+  "publicationState": "LOCAL_CANDIDATE_NOT_APPROVED_OR_PUBLISHED",
+  "stillRenders": [
+    {
+      "path": "pixira-camera-iphone17.webp",
+      "sha256": "c44de7086dee0ae64aead16f9236307d96aaf162ff3f4343d508b45694f65b61",
+      "pixels": [
+        628,
+        1252
+      ]
+    },
+    {
+      "path": "pixira-redevelop-iphone17.webp",
+      "sha256": "7ca37300afe31d8df0fd6ef39abcfc76c732c654a79e0cc4b125d29c4ef56f38",
+      "pixels": [
+        628,
+        1252
+      ]
+    }
+  ]
+}
