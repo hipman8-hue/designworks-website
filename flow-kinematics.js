@@ -40,7 +40,8 @@ function pose(kind,p,g){
   return{profile,x:.5+(c.x-.5)*.8,y:((safeTop+safeBottom)/2+room*Math.tanh((c.y-.51)*20))/g.h,height,rx:c.rx*.85,ry:c.ry,rz:c.rz*.75};
  }
  const tablet=profile==='tablet',centre=ease(.20,.33,p)*(1-ease(.34,.49,p)),base=g.portraitTablet?Math.min(g.h*.84,g.w*1.26,940):Math.min(g.h*.76,g.w*.64,800);
- const out={...c,profile,x:g.portraitTablet?.5+(c.x-.5)*.82:c.x,y:c.y+(!tablet?.03*centre:0),height:base*c.s*(tablet?.98:1)*(g.h>=480?1-(tablet?.16:.14)*centre:1)};
+ const out={...c,profile,x:g.portraitTablet?.5+(c.x-.5)*.82:c.x,y:c.y+(!tablet?.03*centre:0),height:base*c.s*(tablet?.98:1)*(g.h>=480?1-(tablet?0:.14)*centre:1)};
+ if(tablet&&g.h>=480){const handover=ease(.235,.31,p);out.x=kind==='capture'?.73-.46*handover:.27+.46*handover;}
  // Predict the complete text block, so the device arcs below it before taking its side anchor.
  if(tablet&&p>.27&&p<.675&&g.avoidRect){
   const r=g.avoidRect,rad=Math.PI/180,half=out.height*(.49*Math.abs(Math.cos(out.ry*rad))+.11*Math.abs(Math.sin(out.ry*rad))+Math.abs(Math.sin(out.rz*rad)))*.55+12,cx=(g.rtl?1-out.x:out.x)*g.w;
@@ -50,15 +51,40 @@ function pose(kind,p,g){
  }
  return out;
 }
+// Direct attention to the actual native action, rather than orbiting the whole handset.
+function semanticPose(kind,p,g,base){
+ if(g.motionMode==='desktop')return base;
+ const beats=kind==='capture'?[
+  {a:.025,b:.10,c:.205,d:.265,v:.64,span:.64,key:'camera-choice'},
+  {a:.425,b:.49,c:.61,d:.67,v:.405,span:.78,key:'live-view'},
+  {a:.70,b:.78,c:.93,d:1,v:.49,span:.90,key:'optic-effect'}
+ ]:[
+  {a:.015,b:.09,c:.21,d:.285,v:.55,key:'redevelop-look'},
+  {a:.30,b:.40,c:.60,d:.72,v:.59,key:'edit-controls'}
+ ];
+ const stacked=g.stacked||g.portraitTablet;
+ if(kind==='film'&&!stacked)Object.assign(beats[1],{a:.50,b:.57,c:.65,d:.73});
+ let beat=beats.find(b=>p>=b.a&&p<=b.d),amount=beat?ease(beat.a,beat.b,p)*(1-ease(beat.c,beat.d,p)):0;
+ // Remain close while the real EV gesture happens; pan from live view toward the controls.
+ if(kind==='capture'&&p>.61&&p<.78){const t=ease(.61,.78,p);beat={key:t<.5?'live-view':'optic-effect',v:.405+.085*t,span:.78+.12*t};amount=1;}
+ const available=stacked?g.h-g.copyH-32:g.h;
+ const framingSpan=kind==='capture'?(beat?.span??.90):0;
+ const actionCap=framingSpan?(available-48)/framingSpan:Infinity;
+ const closeHeight=Math.min(actionCap,stacked?Math.min(g.w*(g.stacked?2.10:1.60),available*1.95):Math.min(g.w*1.02,g.h*1.75));
+ return{...base,rx:base.rx*.5*(1-amount),ry:base.ry*.45*(1-amount),rz:base.rz*.4*(1-amount),height:base.height+(Math.max(base.height,closeHeight)-base.height)*amount,
+  focusWeight:amount,focusU:.5,focusV:beat?.v??.5,focusX:stacked?.5:g.rtl?(base.x>=.5?.26:.74):(base.x>=.5?.74:.26),focusY:stacked?(g.copyH+32+(g.h-g.copyH-32)/2)/g.h:.53,
+  semantic:{key:beat?.key??'transition',amount,closeup:amount>.05,clipTop:stacked?g.copyH+32:0}};
+}
 // Preserve the established physical scroll length before the three result chapters.
 function storyProgress(raw){const a=.86/.66,b=.14/.34;if(raw<=.64)return raw*a;if(raw>=.68)return .86+(raw-.66)*b;const t=(raw-.64)/.04,integral=2.5*t**4-3*t**5+t**6;return .64*a+.04*(a*t+(b-a)*integral)}
 function margin(q,w,h){let minimum=Infinity;for(const p of[{x:0,y:0},{x:w,y:0},{x:w,y:h},{x:0,y:h}])for(let i=0;i<4;i++){const a=q[i],b=q[(i+1)%4],dx=b.x-a.x,dy=b.y-a.y;minimum=Math.min(minimum,(dx*(p.y-a.y)-dy*(p.x-a.x))/Math.hypot(dx,dy))}return minimum}
 function dock(panel,g,p){
  const a=panel._flow;if(g.stacked||g.portraitTablet||g.h<480||!a){g.avoidRect=null;panel.style.setProperty('--copy-scale','1');panel.style.setProperty('--copy-body-opacity','1');return}
+ if(g.motionMode==='tablet'){panel.style.setProperty('--story-copy-x','0px');panel.style.setProperty('--story-copy-y','0px');panel.style.setProperty('--copy-scale','1');panel.style.setProperty('--copy-body-opacity','1');const top=(g.h-a.height)/2;g.avoidRect={left:a.left,right:a.left+a.width,top,bottom:top+a.height,alpha:parseFloat(panel.style.getPropertyValue('--story-copy-opacity'))||0};return;}
  const tablet=g.motionMode==='tablet',u=ease(.36,.54,p),sx=tablet?1-(1-u)**4:ease(.33,.40,p),sy=tablet?u**3:ease(.40,.49,p),small=g.w<1200?.8:.68,scale=small+(1-small)*sy;
  const centreX=g.w/2-(a.headingCenter??a.width/2)*small,top=24+(((g.h-a.height)/2)-24)*sy;
  panel.style.setProperty('--story-copy-x',((centreX-a.left)*(1-sx)).toFixed(3)+'px');panel.style.setProperty('--story-copy-y',(top+a.height*scale/2-g.h/2).toFixed(3)+'px');panel.style.setProperty('--copy-scale',scale.toFixed(5));panel.style.setProperty('--copy-body-opacity',tablet?'1':ease(.35,.95,sy).toFixed(5));
  const left=a.left+(centreX-a.left)*(1-sx);g.avoidRect=tablet?{left,right:left+a.width*scale,top,bottom:top+a.height*scale,alpha:parseFloat(panel.style.getPropertyValue('--story-copy-opacity'))||0}:null;
 }
-globalThis.PixiraKinematics={curve,quadMatrix,ease,pose,margin,dock,storyProgress,CAPTURE,FILM,PROFILES};
+globalThis.PixiraKinematics={curve,quadMatrix,ease,pose,margin,dock,storyProgress,CAPTURE,FILM,PROFILES,semanticPose};
 })();

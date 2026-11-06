@@ -18,13 +18,13 @@
       set(section,'--capture-phone-h',mediaH+'px');(s.enabled?live.querySelector('.capture-tools'):caption).append(button);
     },
     render(s,p,g){
-      selectPanel(s,p,[[0,.27],[.27,.675],[.675,1]]);PixiraKinematics.dock(s.panels[1],g,p);
-      const pose=PixiraKinematics.pose('capture',p,g);s.model?.setOpacity(1);s.model?.render(pose,g);
+      selectPanel(s,p,g.motionMode==='tablet'&&!g.portraitTablet&&g.h>=480?[[0,.24],[.30,.675],[.675,1]]:[[0,.27],[.27,.675],[.675,1]]);PixiraKinematics.dock(s.panels[1],g,p);
+      const pose=PixiraKinematics.semanticPose('capture',p,g,PixiraKinematics.pose('capture',p,g));set(live.querySelector('.phone-model-host'),'--native-focus-top',(pose.semantic?.clipTop||0)+'px');s.model?.setOpacity(1);s.model?.render(pose,g);
       set(focus,'--focus-opacity',(PixiraKinematics.ease(.24,.28,p)*(1-PixiraKinematics.ease(.38,.42,p))).toFixed(4));
       if(p<.24)return mix(1.2,1.9,smooth(.03,.22,p));
       if(p<.42)return mix(1.9,4.3,smooth(.24,.40,p));
       if(p<.68)return mix(4.3,6.1,smooth(.43,.65,p));
-      return mix(6.201,11.7667,smooth(.70,.96,p));
+      return mix(6.201,11.7667,smooth(.70,g.motionMode==='desktop'?.96:.90,p));
     }
   });
   story.scrubber=new Scrubber(story,live.querySelector('video'),live.querySelector('.story-cover'),'/assets/demos/pixira-camera-story-en.mp4?v=721f57269385');attachModel(story,live.querySelector('.phone-model-host'),poster);story.fit();
@@ -33,5 +33,5 @@
     const target=document.querySelector('#screen-dialog>img'),video=story.scrubber.video;if(!target||video.readyState<2)return;
     try{const c=document.createElement('canvas');c.width=video.videoWidth;c.height=video.videoHeight;c.getContext('2d').drawImage(video,0,0);target.src=c.toDataURL('image/webp',.94);target.removeAttribute('srcset')}catch{}
   });
-  if(new URLSearchParams(location.search).has('motion-qa')||new URLSearchParams(location.search).has('flow-record'))globalThis.PixiraCaptureQA={sample:()=>story.sample(),exportStill:()=>story.model.exportStill()};
+  if(new URLSearchParams(location.search).has('motion-qa')||new URLSearchParams(location.search).has('flow-record'))globalThis.PixiraCaptureQA={sample:()=>({...story.sample(),nativeFocus:story.model?.pose?.semantic?{point:story.model.projectScreenRect({left:story.model.pose.focusU,top:story.model.pose.focusV,right:story.model.pose.focusU,bottom:story.model.pose.focusV})?.[0],screen:story.model.projectScreenRect({left:0,top:0,right:1,bottom:1})}:null}),exportStill:()=>story.model.exportStill()};
 })();

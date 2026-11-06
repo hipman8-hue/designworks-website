@@ -151,7 +151,7 @@
 .scene-bridge{position:absolute;z-index:4;top:24px;inset-inline:24px;text-align:center;font-size:22px;font-weight:600;line-height:1.4;color:#343c46;pointer-events:none;opacity:0}
 .story-stacked .scene-bridge{font-size:18px}.story-compact .scene-bridge{font-size:16px;top:16px}
 
-/* Claude-collaborated archival-paper direction: micro-grain field + one independently placed deckled seam. */
+/* Archival micro-grain field with one independently placed deckled seam. */
 #capture.capture-story .capture-scene::before,.edit-story .edit-stage::before,.paper-material{background:#f0eeea url('/assets/textures/pixira-paper-field-v2.webp?v=b503211ab639') center/cover no-repeat}
 #capture.capture-story .capture-scene::before,.edit-story .edit-stage::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none}
 #capture.capture-story .capture-scene::after,.edit-story .edit-stage::after,.paper-material::after{content:'';position:absolute;z-index:0;left:-40px;right:-40px;top:var(--paper-seam-top,76%);height:180px;background:url('/assets/textures/pixira-paper-seam-v2.webp?v=618d525db619') center/max(100%,960px) auto no-repeat;mask-image:linear-gradient(transparent,#000 32%,#000 68%,transparent);opacity:.86;transform:translateY(-50%) rotate(-3deg);pointer-events:none}
@@ -171,3 +171,16 @@
 .story-portrait .story-copy :is(h2,h3){font-size:30px;line-height:1.24}
 .story-portrait .story-description{font-size:18px;line-height:1.6;margin-top:14px}
 .story-portrait .story-disclosure{font-size:12px;margin-top:8px}
+
+/* Intentional close-ups reveal the recorded control/photo while keeping copy on paper. */
+.phone-model-host{clip-path:inset(var(--native-focus-top,0px) 0 0 0)}
+
+.film-tools.tools-copy-side{inset-inline-start:24px;inset-inline-end:auto}
+
+/* The native photograph lifts intact onto archival paper. */
+.proof-print{display:none;position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;z-index:2;pointer-events:none;opacity:0;background:#f7f5f0 url('/assets/textures/pixira-paper-field-v2.webp?v=b503211ab639') center/cover;border-radius:3px;box-shadow:0 calc(20px + 60px*var(--print-lift,0)) calc(60px + 120px*var(--print-lift,0)) #161c2424;will-change:transform,opacity}
+.print-mode .proof-print{display:block}
+.proof-print-stamp{position:absolute;left:var(--stamp-x);top:var(--stamp-y);width:var(--stamp-w);height:var(--stamp-h);display:flex;align-items:center;gap:1em;transform:scaleX(var(--stamp-aspect,1));transform-origin:left center;color:#343c46;font-size:var(--stamp-size);line-height:1.4;font-weight:550;opacity:0;white-space:nowrap;font-variant-numeric:tabular-nums}
+.proof-print-number{font-size:.8em;letter-spacing:.12em;font-weight:450;color:#727970}
+
+[dir=rtl] .result-caption .result-labels:not(.is-settled) .result-before::after{content:' ←'}
