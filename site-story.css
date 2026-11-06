@@ -138,6 +138,8 @@
 .story-compact .result-steps{bottom:12px;inset-inline:24px}
 
 .result-caption,.story-stacked .result-caption,.story-compact .result-caption{bottom:calc(44px + var(--result-steps-h,64px))}
+.result-recipe{display:none}
+.responsive-scene .result-recipe{display:block;min-height:18px;margin-top:8px;font-size:12px;line-height:1.5;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:.01em;color:#fffd;white-space:nowrap}
 
 
 /* Portrait tablets get a full-height two-column shot rather than a stretched phone layout. */
@@ -184,3 +186,16 @@
 .proof-print-number{font-size:.8em;letter-spacing:.12em;font-weight:450;color:#727970}
 
 [dir=rtl] .result-caption .result-labels:not(.is-settled) .result-before::after{content:' ←'}
+
+/* Responsive reading stage: one text anchor and one handset anchor per story. */
+.responsive-scene .story-copy,.responsive-scene .story-copy.copy-end{inset-inline-start:48px;inset-inline-end:auto;top:50%;width:38%;padding:0;text-align:start;transform:translateY(-50%);transform-origin:center}
+.responsive-scene .phone-model-host{clip-path:none}
+.responsive-scene :is(.capture-tools,.film-tools){inset-inline-start:auto;inset-inline-end:20px;top:20px;bottom:auto}
+.responsive-scene.story-stacked .story-copy,.responsive-scene.story-stacked .story-copy.copy-end{inset-inline:24px;top:28px;width:auto;padding-inline-end:52px;text-align:start;transform:none}
+.responsive-scene.story-portrait .story-copy,.responsive-scene.story-portrait .story-copy.copy-end{inset-inline:32px;top:36px;width:auto;padding-inline:56px;text-align:center;transform:none}
+.responsive-scene.story-mobile-compact .story-copy,.responsive-scene.story-mobile-compact .story-copy.copy-end{inset-inline-start:28px;inset-inline-end:auto;top:50%;width:39%;padding:0;transform:translateY(-50%)}
+@media(max-width:1199px),(pointer:coarse){
+ .capture-note{padding-block:88px 108px}
+ .edit-section>.wrap>.redevelop-heading{padding-bottom:88px}
+}
+@media(max-width:599px){.capture-note{padding-block:64px 84px}}

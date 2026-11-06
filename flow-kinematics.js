@@ -52,29 +52,19 @@ function pose(kind,p,g){
  return out;
 }
 // Direct attention to the actual native action, rather than orbiting the whole handset.
-function semanticPose(kind,p,g,base){
- if(g.motionMode==='desktop')return base;
- const beats=kind==='capture'?[
-  {a:.025,b:.10,c:.205,d:.265,v:.64,span:.64,key:'camera-choice'},
-  {a:.425,b:.49,c:.61,d:.67,v:.405,span:.78,key:'live-view'},
-  {a:.70,b:.78,c:.93,d:1,v:.49,span:.90,key:'optic-effect'}
- ]:[
-  {a:.015,b:.09,c:.21,d:.285,v:.55,key:'redevelop-look'},
-  {a:.30,b:.40,c:.60,d:.72,v:.59,key:'edit-controls'}
- ];
- const stacked=g.stacked||g.portraitTablet;
- if(kind==='film'&&!stacked)Object.assign(beats[1],{a:.50,b:.57,c:.65,d:.73});
- let beat=beats.find(b=>p>=b.a&&p<=b.d),amount=beat?ease(beat.a,beat.b,p)*(1-ease(beat.c,beat.d,p)):0;
- // Remain close while the real EV gesture happens; pan from live view toward the controls.
- if(kind==='capture'&&p>.61&&p<.78){const t=ease(.61,.78,p);beat={key:t<.5?'live-view':'optic-effect',v:.405+.085*t,span:.78+.12*t};amount=1;}
- const available=stacked?g.h-g.copyH-32:g.h;
- const framingSpan=kind==='capture'?(beat?.span??.90):0;
- const actionCap=framingSpan?(available-48)/framingSpan:Infinity;
- const closeHeight=Math.min(actionCap,stacked?Math.min(g.w*(g.stacked?2.10:1.60),available*1.95):Math.min(g.w*1.02,g.h*1.75));
- return{...base,rx:base.rx*.5*(1-amount),ry:base.ry*.45*(1-amount),rz:base.rz*.4*(1-amount),height:base.height+(Math.max(base.height,closeHeight)-base.height)*amount,
-  focusWeight:amount,focusU:.5,focusV:beat?.v??.5,focusX:stacked?.5:g.rtl?(base.x>=.5?.26:.74):(base.x>=.5?.74:.26),focusY:stacked?(g.copyH+32+(g.h-g.copyH-32)/2)/g.h:.53,
-  semantic:{key:beat?.key??'transition',amount,closeup:amount>.05,clipTop:stacked?g.copyH+32:0}};
+// One owner of the complete responsive handset pose. App chapters change inside
+// the same reading frame; they never reset to a small orbit between actions.
+function responsivePose(kind,p,g){
+ const vertical=g.stacked||g.portraitTablet,enter=ease(0,.10,p);
+ const top=vertical?g.copyH+(g.stacked?56:80):36;
+ const room=Math.max(160,g.h-top-24);
+ const readingHeight=vertical?Math.min(g.w*(g.stacked?1.65:.98),room*.96,g.stacked?720:940):Math.min(g.h*.82,g.w*.72,820);
+ const height=readingHeight*(.90+.10*enter),x=vertical?.5:.73;
+ const y=vertical?(top+height*.5+20*(1-enter))/g.h:.50+.025*(1-enter);
+ return{profile:g.motionMode,x,y,height,rx:4*(1-enter),ry:(kind==='capture'?-6:6)*(1-enter),rz:0,focusWeight:0,shadowInsideOnly:true,
+  semantic:{key:kind==='capture'?(p<.27?'camera-choice':p<.675?'live-view':'optic-effect'):(p<.27?'redevelop-look':p<.675?'edit-controls':'original'),amount:0,closeup:false,clipTop:0}};
 }
+function semanticPose(kind,p,g,base){return g.motionMode==='desktop'?base:responsivePose(kind,p,g)}
 // Preserve the established physical scroll length before the three result chapters.
 function storyProgress(raw){const a=.86/.66,b=.14/.34;if(raw<=.64)return raw*a;if(raw>=.68)return .86+(raw-.66)*b;const t=(raw-.64)/.04,integral=2.5*t**4-3*t**5+t**6;return .64*a+.04*(a*t+(b-a)*integral)}
 function margin(q,w,h){let minimum=Infinity;for(const p of[{x:0,y:0},{x:w,y:0},{x:w,y:h},{x:0,y:h}])for(let i=0;i<4;i++){const a=q[i],b=q[(i+1)%4],dx=b.x-a.x,dy=b.y-a.y;minimum=Math.min(minimum,(dx*(p.y-a.y)-dy*(p.x-a.x))/Math.hypot(dx,dy))}return minimum}
@@ -86,5 +76,5 @@ function dock(panel,g,p){
  panel.style.setProperty('--story-copy-x',((centreX-a.left)*(1-sx)).toFixed(3)+'px');panel.style.setProperty('--story-copy-y',(top+a.height*scale/2-g.h/2).toFixed(3)+'px');panel.style.setProperty('--copy-scale',scale.toFixed(5));panel.style.setProperty('--copy-body-opacity',tablet?'1':ease(.35,.95,sy).toFixed(5));
  const left=a.left+(centreX-a.left)*(1-sx);g.avoidRect=tablet?{left,right:left+a.width*scale,top,bottom:top+a.height*scale,alpha:parseFloat(panel.style.getPropertyValue('--story-copy-opacity'))||0}:null;
 }
-globalThis.PixiraKinematics={curve,quadMatrix,ease,pose,margin,dock,storyProgress,CAPTURE,FILM,PROFILES,semanticPose};
+globalThis.PixiraKinematics={curve,quadMatrix,ease,pose,margin,dock,storyProgress,CAPTURE,FILM,PROFILES,semanticPose,responsivePose};
 })();
